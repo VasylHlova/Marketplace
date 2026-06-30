@@ -14,13 +14,13 @@ from app.repositories import TokenRepositoryProtocol, UserRepositoryProtocol
 
 
 class AuthService:
-    def __init__(
-        self, user_repo: UserRepositoryProtocol, token_repo: TokenRepositoryProtocol
-    ) -> None:
+    def __init__(self, user_repo: UserRepositoryProtocol, token_repo: TokenRepositoryProtocol) -> None:
         self._user_repo = user_repo
         self._token_repo = token_repo
 
-    async def _save_refresh_token(self, user_id: str | uuid.UUID, token: str, expire: datetime.datetime) -> None:
+    async def _save_refresh_token(
+        self, user_id: str | uuid.UUID, token: str, expire: datetime.datetime
+    ) -> None:
         time_delta = expire - datetime.datetime.now(datetime.UTC)
         ttl_seconds = int(time_delta.total_seconds())
         decoded_payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])

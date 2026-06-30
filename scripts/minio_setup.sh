@@ -17,9 +17,11 @@ done
 echo 'Waiting for MinIO to restart...'
 sleep 10
 
-until /usr/bin/mc event add myminio/marketplace-media arn:minio:sqs::1:webhook --event put; do
-  echo 'Waiting for event add...'
+until /usr/bin/mc event list myminio/marketplace-media > /dev/null 2>&1; do
+  echo 'Waiting for MinIO to become ready...'
   sleep 2
 done
+
+/usr/bin/mc event add myminio/marketplace-media arn:minio:sqs::1:webhook --event put || echo "Event already configured."
 
 echo 'Minio setup complete.'

@@ -1,17 +1,19 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.product import Product
+from app.models.user import User
 from tests.factories import ProductFactory, UserFactory
 
 
 @pytest.mark.asyncio
 async def test_media_repo_get_active_urls(media_repo, db_session: AsyncSession, faker):
-    from app.models.user import User
-    from app.models.product import Product
     user: User = UserFactory(avatar_url=f"http://example.com/{faker.uuid4()}.jpg")  # type: ignore[assignment]
     db_session.add(user)
 
-    product: Product = ProductFactory(seller_id=user.id, image_url=f"http://example.com/{faker.uuid4()}.jpg")  # type: ignore[assignment]
+    product: Product = ProductFactory(
+        seller_id=user.id, image_url=f"http://example.com/{faker.uuid4()}.jpg"
+    )  # type: ignore[assignment]
     db_session.add(product)
 
     await db_session.commit()
@@ -23,8 +25,6 @@ async def test_media_repo_get_active_urls(media_repo, db_session: AsyncSession, 
 
 @pytest.mark.asyncio
 async def test_media_repo_update_product_media(media_repo, db_session: AsyncSession, faker):
-    from app.models.user import User
-    from app.models.product import Product
     user: User = UserFactory()  # type: ignore[assignment]
     db_session.add(user)
     await db_session.flush()

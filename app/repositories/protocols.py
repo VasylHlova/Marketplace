@@ -1,10 +1,10 @@
-from typing import Protocol, runtime_checkable, Any
+from typing import Any, Protocol, runtime_checkable
 
-from app.repositories.base import CRUDRepositoryProtocol
 from app.models.chat import ChatMessage, ChatRoom
 from app.models.order import Order, OrderItem
 from app.models.product import Product
 from app.models.user import User
+from app.repositories.base import CRUDRepositoryProtocol
 
 
 @runtime_checkable
@@ -15,9 +15,15 @@ class UserRepositoryProtocol(CRUDRepositoryProtocol[User], Protocol):
 
 @runtime_checkable
 class ProductRepositoryProtocol(CRUDRepositoryProtocol[Product], Protocol):
-    async def get_all_by_seller(self, seller_id: str, limit: int, offset: int) -> tuple[list[Product], int]: ...
+    async def get_all_by_seller(
+        self, seller_id: str, limit: int, offset: int
+    ) -> tuple[list[Product], int]: ...
+
     async def get_by_ids(self, limit: int, offset: int, ids: list[str]) -> tuple[list[Product], int]: ...
-    async def get_all_filtered_by_price(self, limit: int, offset: int, filters: list[Any]) -> tuple[list[Product], int]: ...
+
+    async def get_all_filtered_by_price(
+        self, limit: int, offset: int, filters: list[Any]
+    ) -> tuple[list[Product], int]: ...
     async def decrement_stock(self, product_id: str, quantity: int) -> bool: ...
     async def increment_stock(self, product_id: str, quantity: int) -> bool: ...
 
@@ -29,18 +35,27 @@ class OrderRepositoryProtocol(CRUDRepositoryProtocol[Order], Protocol):
 
 @runtime_checkable
 class OrderItemRepositoryProtocol(CRUDRepositoryProtocol[OrderItem], Protocol):
-    async def get_all_by_order(self, order_id: str, limit: int, offset: int) -> tuple[list[OrderItem], int]: ...
+    async def get_all_by_order(
+        self, order_id: str, limit: int, offset: int
+    ) -> tuple[list[OrderItem], int]: ...
     async def get_all_by_order_unpaginated(self, order_id: str) -> list[OrderItem]: ...
     async def get_seller_summary(self, seller_id: str) -> dict[str, Any]: ...
 
 
 @runtime_checkable
 class ChatRoomRepositoryProtocol(CRUDRepositoryProtocol[ChatRoom], Protocol):
-    async def get_all_by_buyer(self, buyer_id: str, limit: int, offset: int) -> tuple[list[ChatRoom], int]: ...
-    async def get_all_by_seller(self, seller_id: str, limit: int, offset: int) -> tuple[list[ChatRoom], int]: ...
+    async def get_all_by_buyer(
+        self, buyer_id: str, limit: int, offset: int
+    ) -> tuple[list[ChatRoom], int]: ...
+
+    async def get_all_by_seller(
+        self, seller_id: str, limit: int, offset: int
+    ) -> tuple[list[ChatRoom], int]: ...
     async def get_by_users(self, buyer_id: str, seller_id: str) -> ChatRoom | None: ...
 
 
 @runtime_checkable
 class ChatMessageRepositoryProtocol(CRUDRepositoryProtocol[ChatMessage], Protocol):
-    async def get_all_by_room(self, room_id: str, limit: int, offset: int) -> tuple[list[ChatMessage], int]: ...
+    async def get_all_by_room(
+        self, room_id: str, limit: int, offset: int
+    ) -> tuple[list[ChatMessage], int]: ...
