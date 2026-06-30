@@ -1,0 +1,14 @@
+**/.DS_Store
+**/__pycache__
+**/.venv
+**/.env
+**/.git
+**/.gitignore
+**/.vscode
+**/node_modules
+**/compose.y*ml
+**/Dockerfile*
+LICENSE
+README.md
+
+*.db

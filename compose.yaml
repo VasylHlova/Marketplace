@@ -1,0 +1,182 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: always
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis_data:/data
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app/
+    command: celery -A app.core.celery worker -l info
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - venv_data:/app/.venv
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app/
+    command: celery -A app.core.celery beat -l info
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - venv_data:/app/.venv
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - venv_data:/app/.venv
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: /app/app
+        - action: rebuild
+          path: pyproject.toml
+        - action: rebuild
+          path: uv.lock
+  
+  elastic_seach:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.4.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000" 
+      - "9001:9001" 
+    env_file:
+      - .env
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  minio-setup:
+    image: minio/mc
+    tty: true
+    depends_on:
+      - minio
+      - fastapi
+    env_file:
+      - .env
+    volumes:
+      - ./scripts/minio_setup.sh:/minio_setup.sh:ro
+    entrypoint: /bin/sh /minio_setup.sh
+
+  prometheus:
+      image: prom/prometheus:latest
+      container_name: prometheus
+      ports:
+        - "9090:9090"
+      volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+        - prometheus_data:/prometheus
+      command:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+      networks:
+        - monitoring
+        - default
+      restart: unless-stopped
+      depends_on:
+        - fastapi
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    ports:
+      - "9100:9100"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/etc/grafana/dashboards
+    networks:
+      - monitoring
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  loki:
+      image: grafana/loki:latest
+      container_name: loki
+      ports:
+        - "3100:3100"
+      command: -config.file=/etc/loki/local-config.yaml
+      networks:
+        - monitoring
+      restart: unless-stopped
+
+  promtail:
+      image: grafana/promtail:latest
+      container_name: promtail
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./promtail-config.yml:/etc/promtail/config.yml
+      command: -config.file=/etc/promtail/config.yml
+      networks:
+        - monitoring
+      restart: unless-stopped
+      depends_on:
+        - loki
+
+networks:
+  monitoring:
+    driver: bridge
+
+
+
+volumes:
+  minio_data:
+  redis_data:
+  es_data:
+  venv_data:
+  prometheus_data:
+  grafana_data:

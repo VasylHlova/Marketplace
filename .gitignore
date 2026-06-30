@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.env
+.envrc
+.venv
+env/
+venv/
+
+# Test / coverage
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+htmlcov/
+
+# Type checker caches
+.mypy_cache/
+.pyre/
+.pytype/
+
+# Tools
+.ruff_cache/
+.pdm-python
+.pixi
+
+# OS
+.DS_Store
+
+# IDE
+.idea/
+# .vscode/
+
+# Antigravity CLI
+.antigravitycli
