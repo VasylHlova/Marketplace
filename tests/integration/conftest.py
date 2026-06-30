@@ -131,7 +131,7 @@ def media_repo(db_session: AsyncSession):
 def storage_client():
     return MinioStorageClient(
         bucket=settings.MINIO_BUCKET_NAME,
-        url=settings.MINIO_URL,
+        url="http://localhost:9000",
         user=settings.MINIO_ROOT_USER,
         password=settings.MINIO_ROOT_PASSWORD,
     )

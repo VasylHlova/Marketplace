@@ -6,6 +6,7 @@ from tests.unit.dummies import DummyModel
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_room_success(chat_service, mock_room_repo):
     buyer = DummyModel(id="b1", role=UserRole.BUYER.value)
     seller = DummyModel(id="s1")
@@ -17,6 +18,7 @@ async def test_create_room_success(chat_service, mock_room_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_room_existing(chat_service, mock_room_repo):
     buyer = DummyModel(id="b1", role=UserRole.BUYER.value)
     seller = DummyModel(id="s1")
@@ -28,6 +30,7 @@ async def test_create_room_existing(chat_service, mock_room_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_room_exception(chat_service, mock_room_repo):
     buyer = DummyModel(id="b1", role=UserRole.BUYER.value)
     seller = DummyModel(id="s1")
@@ -39,6 +42,7 @@ async def test_create_room_exception(chat_service, mock_room_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_room_with_self(chat_service, mock_room_repo):
     buyer = DummyModel(id="b1", role=UserRole.BUYER.value)
     with pytest.raises(BadRequestError) as exc:
@@ -47,6 +51,7 @@ async def test_create_room_with_self(chat_service, mock_room_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_chat_history_success(chat_service, mock_room_repo, mock_msg_repo):
     room = DummyModel()
     messages = [DummyModel(room_id=room.id) for _ in range(5)]
@@ -59,6 +64,7 @@ async def test_get_chat_history_success(chat_service, mock_room_repo, mock_msg_r
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_save_message_success(chat_service, mock_msg_repo, mocker):
     user = DummyModel(id="user_id_1")
     room_id = "room_id_1"

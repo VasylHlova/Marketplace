@@ -16,6 +16,7 @@ class MockContextManager:
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_generate_presigned_upload_post_image(mocker):
     service = MediaService()
     mock_client = mocker.AsyncMock()
@@ -36,6 +37,7 @@ async def test_generate_presigned_upload_post_image(mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_generate_presigned_upload_post_video(mocker):
     service = MediaService()
     mock_client = mocker.AsyncMock()
@@ -65,6 +67,7 @@ def _make_record(key: str, event: str = "s3:ObjectCreated:Put") -> dict:
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_triggers_product_task(mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     product_id = faker.uuid4()
@@ -80,6 +83,7 @@ async def test_webhook_triggers_product_task(mocker, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_triggers_avatar_task(mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     user_id = faker.uuid4()
@@ -95,6 +99,7 @@ async def test_webhook_triggers_avatar_task(mocker, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_triggers_chat_task(mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     room_id = faker.uuid4()
@@ -112,6 +117,7 @@ async def test_webhook_triggers_chat_task(mocker, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_ignores_already_processed_webp(mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     product_id = faker.uuid4()
@@ -123,6 +129,7 @@ async def test_webhook_ignores_already_processed_webp(mocker, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_ignores_already_processed_webm(mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     product_id = faker.uuid4()
@@ -134,6 +141,7 @@ async def test_webhook_ignores_already_processed_webm(mocker, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_ignores_non_create_events(mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     product_id = faker.uuid4()
@@ -145,6 +153,7 @@ async def test_webhook_ignores_non_create_events(mocker, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_ignores_unknown_path_prefix(mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     payload = {"Records": [_make_record("unknown/path/img.jpg")]}
@@ -155,6 +164,7 @@ async def test_webhook_ignores_unknown_path_prefix(mocker, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_empty_records_does_nothing(mocker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     await MediaService().process_webhook_payload({"Records": []})
@@ -162,6 +172,7 @@ async def test_webhook_empty_records_does_nothing(mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_webhook_missing_records_does_nothing(mocker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     await MediaService().process_webhook_payload({})

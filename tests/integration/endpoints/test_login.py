@@ -6,6 +6,7 @@ from app.models.user import User
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_login(async_client: AsyncClient, test_user_with_password: User):
     response = await async_client.post(
         "/login",
@@ -18,6 +19,7 @@ async def test_login(async_client: AsyncClient, test_user_with_password: User):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_refresh_token(async_client: AsyncClient, test_user_with_password: User):
     login_resp = await async_client.post(
         "/login",
@@ -32,6 +34,7 @@ async def test_refresh_token(async_client: AsyncClient, test_user_with_password:
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_logout(async_client: AsyncClient, test_user_with_password: User):
     login_resp = await async_client.post(
         "/login",

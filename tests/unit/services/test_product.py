@@ -5,6 +5,7 @@ from tests.unit.dummies import DummyModel
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_product_success(product_service, mock_product_repo, mocker):
     mocker.patch("app.services.product.index_product_to_es.delay")
     user = DummyModel()
@@ -17,6 +18,7 @@ async def test_create_product_success(product_service, mock_product_repo, mocker
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_product_exception(product_service, mock_product_repo):
     user = DummyModel()
     mock_product_repo.fail_on_create = True
@@ -26,6 +28,7 @@ async def test_create_product_exception(product_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_product_success(product_service, mock_product_repo, mocker):
     mocker.patch("app.services.product.update_product_in_es.delay")
     user = DummyModel()
@@ -38,6 +41,7 @@ async def test_update_product_success(product_service, mock_product_repo, mocker
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_product_not_found(product_service, mock_product_repo):
     with pytest.raises(NotFoundError) as exc:
         await product_service.update("fake_id", {"name": "New Name"})
@@ -45,6 +49,7 @@ async def test_update_product_not_found(product_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_product_exception(product_service, mock_product_repo):
     user = DummyModel()
     product = DummyModel(seller_id=user.id)
@@ -56,6 +61,7 @@ async def test_update_product_exception(product_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_delete_product_success(product_service, mock_product_repo, mocker):
     mocker.patch("app.services.product.delete_product_from_es.delay")
     user = DummyModel()
@@ -67,6 +73,7 @@ async def test_delete_product_success(product_service, mock_product_repo, mocker
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_delete_product_not_found(product_service, mock_product_repo):
     with pytest.raises(NotFoundError) as exc:
         await product_service.delete("fake_id")
@@ -74,6 +81,7 @@ async def test_delete_product_not_found(product_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_delete_product_exception(product_service, mock_product_repo):
     user = DummyModel()
     product = DummyModel(seller_id=user.id)
@@ -85,6 +93,7 @@ async def test_delete_product_exception(product_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_all_products(product_service, mock_product_repo):
     products = [DummyModel() for _ in range(5)]
     for p in products:
@@ -96,6 +105,7 @@ async def test_get_all_products(product_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_all_products_with_filters(product_service, mock_product_repo):
     products = [DummyModel(price=20.0) for _ in range(5)]
     for p in products:
@@ -107,6 +117,7 @@ async def test_get_all_products_with_filters(product_service, mock_product_repo)
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_by_id_success(product_service, mock_product_repo):
     product = DummyModel()
     mock_product_repo.data[product.id] = product
@@ -116,6 +127,7 @@ async def test_get_by_id_success(product_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_by_id_not_found(product_service, mock_product_repo):
     with pytest.raises(NotFoundError) as exc:
         await product_service.get_by_id("fake_id")

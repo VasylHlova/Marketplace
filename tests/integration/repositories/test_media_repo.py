@@ -7,6 +7,7 @@ from tests.factories import ProductFactory, UserFactory
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_media_repo_get_active_urls(media_repo, db_session: AsyncSession, faker):
     user: User = UserFactory(avatar_url=f"http://example.com/{faker.uuid4()}.jpg")  # type: ignore[assignment]
     db_session.add(user)
@@ -24,6 +25,7 @@ async def test_media_repo_get_active_urls(media_repo, db_session: AsyncSession, 
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_media_repo_update_product_media(media_repo, db_session: AsyncSession, faker):
     user: User = UserFactory()  # type: ignore[assignment]
     db_session.add(user)

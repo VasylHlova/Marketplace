@@ -5,6 +5,7 @@ from app.repositories.order import OrderItemRepository, OrderRepository
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_order_get_all_by_buyer(order_repo: OrderRepository, test_user, test_order):
     orders, count = await order_repo.get_all_by_buyer(str(test_user.id), limit=10, offset=0)
     assert count >= 1
@@ -12,6 +13,7 @@ async def test_order_get_all_by_buyer(order_repo: OrderRepository, test_user, te
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_order_item_get_all_by_order(
     order_item_repo: OrderItemRepository, db_session, test_order, test_product
 ):
@@ -25,6 +27,7 @@ async def test_order_item_get_all_by_order(
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_order_item_get_seller_summary(
     order_item_repo: OrderItemRepository, db_session, test_order, test_product, test_user
 ):

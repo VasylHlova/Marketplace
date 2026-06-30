@@ -11,6 +11,7 @@ from tests.unit.dummies import DummyModel
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_authenticate_success(auth_service, mock_user_repo, mocker):
     password = "password123"
     hashed = get_password_hash(password)
@@ -22,6 +23,7 @@ async def test_authenticate_success(auth_service, mock_user_repo, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_authenticate_user_not_found(auth_service, mock_user_repo):
     with pytest.raises(UnauthorizedError) as exc:
         await auth_service.authenticate("test@example.com", "password")
@@ -29,6 +31,7 @@ async def test_authenticate_user_not_found(auth_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_authenticate_invalid_credentials(auth_service, mock_user_repo):
     hashed = get_password_hash("realpassword")
     user = DummyModel(email="test@example.com", password=hashed)
@@ -39,6 +42,7 @@ async def test_authenticate_invalid_credentials(auth_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_login_success(auth_service, mock_user_repo, mock_token_repo):
     password = "password123"
     hashed = get_password_hash(password)
@@ -53,6 +57,7 @@ async def test_login_success(auth_service, mock_user_repo, mock_token_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_refresh_success(auth_service, mock_user_repo, mock_token_repo):
     user_id = str(uuid.uuid4())
     jti = str(uuid.uuid4())
@@ -71,6 +76,7 @@ async def test_refresh_success(auth_service, mock_user_repo, mock_token_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_refresh_invalid_type(auth_service):
     payload = {"sub": "123", "type": "access", "exp": datetime.now(UTC) + timedelta(days=1)}
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
@@ -80,6 +86,7 @@ async def test_refresh_invalid_type(auth_service):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_refresh_token_revoked(auth_service, mock_token_repo):
     user_id = str(uuid.uuid4())
     jti = str(uuid.uuid4())
@@ -92,6 +99,7 @@ async def test_refresh_token_revoked(auth_service, mock_token_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_logout_success(auth_service, mock_token_repo):
     user_id = str(uuid.uuid4())
     jti = str(uuid.uuid4())

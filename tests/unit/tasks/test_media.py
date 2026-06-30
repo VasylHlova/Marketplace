@@ -4,6 +4,7 @@ from app.tasks.media import _cleanup_orphaned_media
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_cleanup_orphaned_media(dummy_storage, dummy_media_repo):
     await _cleanup_orphaned_media(dummy_storage, dummy_media_repo)
 

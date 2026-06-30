@@ -9,6 +9,7 @@ def mock_search(mocker):
     return mocker.patch("app.core.search.search")
 
 
+@pytest.mark.unit
 def test_search_products_in_es_with_query(mock_search):
     mock_search.search.return_value = {"hits": {"total": {"value": 1}, "hits": [{"_id": "123"}]}}
     ids, total = search_products_in_es(query="test_query", limit=10, offset=0)
@@ -30,6 +31,7 @@ def test_search_products_in_es_with_query(mock_search):
     )
 
 
+@pytest.mark.unit
 def test_search_products_in_es_no_query(mock_search):
     mock_search.search.return_value = {"hits": {"total": {"value": 1}, "hits": [{"_id": "123"}]}}
     ids, total = search_products_in_es(limit=10, offset=0)
@@ -40,6 +42,7 @@ def test_search_products_in_es_no_query(mock_search):
     )
 
 
+@pytest.mark.unit
 def test_search_products_in_es_not_found(mock_search):
     mock_search.search.side_effect = NotFoundError(404, "Not Found", {})
     ids, total = search_products_in_es("test_query", limit=10, offset=0)
@@ -47,6 +50,7 @@ def test_search_products_in_es_not_found(mock_search):
     assert total == 0
 
 
+@pytest.mark.unit
 def test_search_products_in_es_total_int(mock_search):
     mock_search.search.return_value = {"hits": {"total": 1, "hits": [{"_id": "123"}]}}
     ids, total = search_products_in_es("test_query", limit=10, offset=0)

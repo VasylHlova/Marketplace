@@ -1,6 +1,9 @@
+import pytest
+
 from app.tasks.email import send_order_confirmation
 
 
+@pytest.mark.unit
 def test_send_order_confirmation(mocker):
     mock_print = mocker.patch("builtins.print")
     send_order_confirmation(buyer_email="customer@example.com", order_id="order_123", total_price=99.99)

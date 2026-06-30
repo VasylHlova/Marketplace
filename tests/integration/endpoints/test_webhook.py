@@ -8,6 +8,7 @@ def _make_payload(key: str, event: str = "s3:ObjectCreated:Put") -> dict:
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_minio_webhook_product_triggers_task(async_client: AsyncClient, mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     product_id = faker.uuid4()
@@ -25,6 +26,7 @@ async def test_minio_webhook_product_triggers_task(async_client: AsyncClient, mo
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_minio_webhook_avatar_triggers_task(async_client: AsyncClient, mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     user_id = faker.uuid4()
@@ -41,6 +43,7 @@ async def test_minio_webhook_avatar_triggers_task(async_client: AsyncClient, moc
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_minio_webhook_chat_triggers_task(async_client: AsyncClient, mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     room_id = faker.uuid4()
@@ -58,6 +61,7 @@ async def test_minio_webhook_chat_triggers_task(async_client: AsyncClient, mocke
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_minio_webhook_ignores_webp(async_client: AsyncClient, mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     product_id = faker.uuid4()
@@ -71,6 +75,7 @@ async def test_minio_webhook_ignores_webp(async_client: AsyncClient, mocker, fak
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_minio_webhook_ignores_delete_event(async_client: AsyncClient, mocker, faker):
     mock_task = mocker.patch("app.services.media.process_media_task")
     product_id = faker.uuid4()
@@ -85,6 +90,7 @@ async def test_minio_webhook_ignores_delete_event(async_client: AsyncClient, moc
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_minio_webhook_empty_payload(async_client: AsyncClient, mocker):
     mock_task = mocker.patch("app.services.media.process_media_task")
 
@@ -95,6 +101,7 @@ async def test_minio_webhook_empty_payload(async_client: AsyncClient, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_minio_webhook_invalid_json(async_client: AsyncClient):
     response = await async_client.post(
         "/webhooks/minio",

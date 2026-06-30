@@ -8,6 +8,7 @@ from tests.factories import ChatMessageFactory
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_create_chat_room(authorized_client: AsyncClient, other_user: User):
     response = await authorized_client.post("/chat/", json={"seller_id": str(other_user.id)})
     assert response.status_code == status.HTTP_201_CREATED
@@ -16,6 +17,7 @@ async def test_create_chat_room(authorized_client: AsyncClient, other_user: User
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_get_chat_history(
     authorized_client: AsyncClient, db_session, test_room: ChatRoom, test_user: User
 ):
@@ -30,6 +32,7 @@ async def test_get_chat_history(
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_get_chat_attachment_upload_url(
     authorized_client: AsyncClient, test_room: ChatRoom, test_user: User
 ):

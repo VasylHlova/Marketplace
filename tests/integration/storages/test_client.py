@@ -5,6 +5,7 @@ import pytest
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_storage_client_upload_download_delete(storage_client, faker):
     test_key = f"test_{faker.uuid4()}.txt"
     test_content = b"Integration test content"

@@ -12,6 +12,7 @@ from tests.factories import OrderFactory, OrderItemFactory, ProductFactory, User
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_seller_summary_by_id(authorized_client: AsyncClient, test_user: User, db_session):
     product = ProductFactory(seller_id=str(test_user.id))
     db_session.add(product)
@@ -33,12 +34,14 @@ async def test_seller_summary_by_id(authorized_client: AsyncClient, test_user: U
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_seller_summary_requires_auth(async_client: AsyncClient):
     response = await async_client.get("/sellers/some-seller-id/summary")
     assert response.status_code in (status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN)
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_seller_summary_accessible_by_buyer(async_client: AsyncClient, test_user: User, db_session):
     buyer = UserFactory(role=UserRole.BUYER.value)
     db_session.add(buyer)
@@ -53,6 +56,7 @@ async def test_seller_summary_accessible_by_buyer(async_client: AsyncClient, tes
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_list_sellers(authorized_client: AsyncClient, db_session):
     seller = UserFactory(role=UserRole.SELLER.value)
     db_session.add(seller)
@@ -65,6 +69,7 @@ async def test_list_sellers(authorized_client: AsyncClient, db_session):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_list_sellers_requires_auth(async_client: AsyncClient):
     response = await async_client.get("/sellers/?limit=10&offset=0")
     assert response.status_code in (status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN)

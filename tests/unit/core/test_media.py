@@ -11,6 +11,7 @@ VALID_IMAGE_PNG = base64.b64decode(
 )
 
 
+@pytest.mark.unit
 def test_get_media_config_image():
     config = get_media_config("image/png")
     assert config is not None
@@ -18,6 +19,7 @@ def test_get_media_config_image():
     assert config.mime == "image/webp"
 
 
+@pytest.mark.unit
 def test_get_media_config_video():
     config = get_media_config("video/mp4")
     assert config is not None
@@ -25,12 +27,14 @@ def test_get_media_config_video():
     assert config.mime == "video/webm"
 
 
+@pytest.mark.unit
 def test_get_media_config_unknown_returns_none():
     config = get_media_config("application/pdf")
     assert config is None
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_process_media_product(dummy_storage, dummy_media_repo, faker):
     product_id = faker.uuid4()
     key = f"products/{product_id}/original.png"
@@ -50,6 +54,7 @@ async def test_process_media_product(dummy_storage, dummy_media_repo, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_process_media_user_avatar(dummy_storage, dummy_media_repo, faker):
     user_id = faker.uuid4()
     key = f"avatars/{user_id}/avatar.png"
@@ -69,6 +74,7 @@ async def test_process_media_user_avatar(dummy_storage, dummy_media_repo, faker)
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_process_media_chat_attachment(dummy_storage, dummy_media_repo, faker):
     room_id = faker.uuid4()
     user_id = faker.uuid4()
@@ -89,6 +95,7 @@ async def test_process_media_chat_attachment(dummy_storage, dummy_media_repo, fa
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_process_media_unknown_type_skipped(dummy_media_repo, faker, tmp_path, mocker):
     from tests.unit.dummies import DummyStorageClient
 
@@ -108,6 +115,7 @@ async def test_process_media_unknown_type_skipped(dummy_media_repo, faker, tmp_p
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_process_media_strips_public_url_prefix(dummy_storage, dummy_media_repo, faker):
     product_id = faker.uuid4()
     raw_key = f"products/{product_id}/img.png"
@@ -119,6 +127,7 @@ async def test_process_media_strips_public_url_prefix(dummy_storage, dummy_media
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_process_media_unknown_entity_type(dummy_storage, dummy_media_repo, faker):
     product_id = faker.uuid4()
     key = f"products/{product_id}/img.png"
@@ -133,6 +142,7 @@ async def test_process_media_unknown_entity_type(dummy_storage, dummy_media_repo
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_process_media_invalid_file(dummy_storage, dummy_media_repo, faker, mocker):
     mocker.patch("app.core.media.filetype.guess", return_value=None)
     product_id = faker.uuid4()
@@ -141,6 +151,7 @@ async def test_process_media_invalid_file(dummy_storage, dummy_media_repo, faker
         await process_media(product_id, "product", key, dummy_storage, dummy_media_repo)
 
 
+@pytest.mark.unit
 def test_process_image_rgba_and_resize(tmp_path):
     input_path = tmp_path / "input.png"
     output_path = tmp_path / "output.webp"
@@ -156,6 +167,7 @@ def test_process_image_rgba_and_resize(tmp_path):
         assert out_img.height == 500
 
 
+@pytest.mark.unit
 def test_process_video(tmp_path, mocker):
 
     mock_ffmpeg = mocker.patch("app.core.media.ffmpeg")

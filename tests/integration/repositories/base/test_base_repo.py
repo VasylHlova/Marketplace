@@ -4,6 +4,7 @@ from tests.integration.repositories.base.dummy import DummyRepository
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_crud_create_and_get_by_id(dummy_repo: DummyRepository):
     dummy = await dummy_repo.create({"name": "Test1", "status": "active"})
     await dummy_repo.commit()
@@ -16,6 +17,7 @@ async def test_crud_create_and_get_by_id(dummy_repo: DummyRepository):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_crud_get_all(dummy_repo: DummyRepository):
     for i in range(3):
         await dummy_repo.create({"name": f"Test{i}", "status": "active"})
@@ -27,6 +29,7 @@ async def test_crud_get_all(dummy_repo: DummyRepository):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_crud_update(dummy_repo: DummyRepository):
     dummy = await dummy_repo.create({"name": "Test1", "status": "active"})
     await dummy_repo.commit()
@@ -37,6 +40,7 @@ async def test_crud_update(dummy_repo: DummyRepository):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_crud_delete(dummy_repo: DummyRepository):
     dummy = await dummy_repo.create({"name": "Test1", "status": "active"})
     await dummy_repo.commit()
@@ -49,6 +53,7 @@ async def test_crud_delete(dummy_repo: DummyRepository):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_mixin_get_all_by_field(dummy_repo: DummyRepository):
     await dummy_repo.create({"name": "Test1", "status": "active"})
     await dummy_repo.create({"name": "Test2", "status": "inactive"})

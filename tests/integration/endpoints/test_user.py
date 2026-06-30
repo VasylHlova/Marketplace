@@ -12,6 +12,7 @@ from app.models.user import User
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_register_user(async_client: AsyncClient):
     unique_email = f"test_{uuid.uuid4()}@example.com"
     response = await async_client.post(
@@ -23,6 +24,7 @@ async def test_register_user(async_client: AsyncClient):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_read_user_self(authorized_client: AsyncClient, test_user: User):
     response = await authorized_client.get("/users/self")
     assert response.status_code == status.HTTP_200_OK
@@ -30,6 +32,7 @@ async def test_read_user_self(authorized_client: AsyncClient, test_user: User):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_update_user_self(authorized_client: AsyncClient, test_user: User):
     new_email = f"updated_{uuid.uuid4()}@example.com"
     response = await authorized_client.patch("/users/self", json={"email": new_email})
@@ -38,12 +41,14 @@ async def test_update_user_self(authorized_client: AsyncClient, test_user: User)
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_delete_user_self(authorized_client: AsyncClient, test_user: User):
     response = await authorized_client.delete("/users/self")
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_update_password(async_client: AsyncClient, test_user_with_password: User):
     access_token = create_access_token(
         subject=str(test_user_with_password.id),
@@ -57,6 +62,7 @@ async def test_update_password(async_client: AsyncClient, test_user_with_passwor
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_get_avatar_upload_url(authorized_client: AsyncClient, test_user: User):
     response = await authorized_client.post(
         "/users/self/avatar-upload-url", json={"file_name": "avatar.png", "file_type": "image/png"}

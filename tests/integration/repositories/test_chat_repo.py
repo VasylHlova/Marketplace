@@ -5,6 +5,7 @@ from app.repositories.chat import ChatMessageRepository, ChatRoomRepository
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_chat_room_get_by_users(
     chat_room_repo: ChatRoomRepository, test_user, other_user, db_session
 ):
@@ -18,6 +19,7 @@ async def test_chat_room_get_by_users(
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_chat_room_get_all_by_buyer(
     chat_room_repo: ChatRoomRepository, test_user, other_user, db_session
 ):
@@ -31,6 +33,7 @@ async def test_chat_room_get_all_by_buyer(
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_chat_room_get_all_by_seller(
     chat_room_repo: ChatRoomRepository, test_user, other_user, db_session
 ):
@@ -44,6 +47,7 @@ async def test_chat_room_get_all_by_seller(
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_chat_message_get_all_by_room(
     chat_msg_repo: ChatMessageRepository, test_user, other_user, db_session
 ):

@@ -6,6 +6,7 @@ from tests.unit.dummies import DummyModel
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_order_success(
     order_service, mock_order_repo, mock_order_item_repo, mock_product_repo, mocker
 ):
@@ -22,6 +23,7 @@ async def test_create_order_success(
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_order_empty_items(order_service):
     user = DummyModel()
     with pytest.raises(BadRequestError) as exc:
@@ -30,6 +32,7 @@ async def test_create_order_empty_items(order_service):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_order_product_not_found(order_service, mock_product_repo):
     user = DummyModel()
     with pytest.raises(NotFoundError) as exc:
@@ -38,6 +41,7 @@ async def test_create_order_product_not_found(order_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_order_product_out_of_stock_zero(order_service, mock_product_repo):
     user = DummyModel()
     product = DummyModel(stock=0, name="Prod")
@@ -48,6 +52,7 @@ async def test_create_order_product_out_of_stock_zero(order_service, mock_produc
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_order_quantity_invalid(order_service, mock_product_repo):
     user = DummyModel()
     product = DummyModel(stock=5, name="Prod")
@@ -58,6 +63,7 @@ async def test_create_order_quantity_invalid(order_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_order_not_enough_stock(order_service, mock_product_repo):
     user = DummyModel()
     product = DummyModel(stock=1, name="Prod")
@@ -68,6 +74,7 @@ async def test_create_order_not_enough_stock(order_service, mock_product_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_order_db_exception(order_service, mock_product_repo, mock_order_repo):
     user = DummyModel()
     product = DummyModel(stock=10, name="Prod")
@@ -80,6 +87,7 @@ async def test_create_order_db_exception(order_service, mock_product_repo, mock_
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_cancel_order_success(
     order_service, mock_order_repo, mock_order_item_repo, mock_product_repo
 ):
@@ -98,6 +106,7 @@ async def test_cancel_order_success(
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_cancel_order_not_found(order_service, mock_order_repo):
     with pytest.raises(NotFoundError) as exc:
         await order_service.cancel_order("fake_id")
@@ -105,6 +114,7 @@ async def test_cancel_order_not_found(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_cancel_order_already_canceled(order_service, mock_order_repo):
     order = DummyModel(status=OrderStatus.CANCELED.value)
     mock_order_repo.data[order.id] = order
@@ -114,6 +124,7 @@ async def test_cancel_order_already_canceled(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_cancel_order_db_exception(
     order_service, mock_order_repo, mock_order_item_repo, mock_product_repo
 ):
@@ -130,6 +141,7 @@ async def test_cancel_order_db_exception(
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_complete_order_success(order_service, mock_order_repo):
     order = DummyModel(status=OrderStatus.ACTIVE.value)
     mock_order_repo.data[order.id] = order
@@ -140,6 +152,7 @@ async def test_complete_order_success(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_complete_order_not_found(order_service, mock_order_repo):
     with pytest.raises(NotFoundError) as exc:
         await order_service.complete_order("fake_id")
@@ -147,6 +160,7 @@ async def test_complete_order_not_found(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_complete_order_not_active(order_service, mock_order_repo):
     order = DummyModel(status=OrderStatus.CANCELED.value)
     mock_order_repo.data[order.id] = order
@@ -156,6 +170,7 @@ async def test_complete_order_not_active(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_complete_order_db_exception(order_service, mock_order_repo):
     order = DummyModel(status=OrderStatus.ACTIVE.value)
     mock_order_repo.data[order.id] = order
@@ -167,6 +182,7 @@ async def test_complete_order_db_exception(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_by_id_success(order_service, mock_order_repo):
     order = DummyModel()
     mock_order_repo.data[order.id] = order
@@ -176,6 +192,7 @@ async def test_get_by_id_success(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_by_id_not_found(order_service, mock_order_repo):
     with pytest.raises(NotFoundError) as exc:
         await order_service.get_by_id("fake_id")
@@ -183,6 +200,7 @@ async def test_get_by_id_not_found(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_all_by_buyer(order_service, mock_order_repo):
     user = DummyModel()
     orders = [DummyModel(buyer_id=str(user.id)) for _ in range(3)]
@@ -195,6 +213,7 @@ async def test_get_all_by_buyer(order_service, mock_order_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_get_seller_summary(order_service, mock_order_item_repo):
     user = DummyModel()
     result = await order_service.get_seller_summary(str(user.id))
@@ -203,6 +222,7 @@ async def test_get_seller_summary(order_service, mock_order_item_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_order_item_get_items_success(order_item_service, mock_order_repo, mock_order_item_repo):
     order = DummyModel()
     mock_order_repo.data[order.id] = order
@@ -215,6 +235,7 @@ async def test_order_item_get_items_success(order_item_service, mock_order_repo,
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_order_item_get_items_not_found(order_item_service, mock_order_repo):
     with pytest.raises(NotFoundError) as exc:
         await order_item_service.get_items("fake_id", limit=10, offset=0)

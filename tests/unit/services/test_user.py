@@ -6,6 +6,7 @@ from tests.unit.dummies import DummyModel
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_user_success(user_service, mock_user_repo, mocker):
     mock_hashed = "hashed_pw"
     mocker.patch("app.services.user.get_password_hash", return_value=mock_hashed)
@@ -21,6 +22,7 @@ async def test_create_user_success(user_service, mock_user_repo, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_user_already_exists(user_service, mock_user_repo):
     user = DummyModel(email="test@example.com")
     mock_user_repo.data[user.id] = user
@@ -30,6 +32,7 @@ async def test_create_user_already_exists(user_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_create_user_exception(user_service, mock_user_repo, mocker):
     mock_user_repo.fail_on_create = True
     mocker.patch(
@@ -41,6 +44,7 @@ async def test_create_user_exception(user_service, mock_user_repo, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_user_success(user_service, mock_user_repo, mocker):
     user = DummyModel(email="old@example.com")
     mock_user_repo.data[user.id] = user
@@ -51,6 +55,7 @@ async def test_update_user_success(user_service, mock_user_repo, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_user_password(user_service, mock_user_repo, mocker):
     user = DummyModel(password="old")
     mock_user_repo.data[user.id] = user
@@ -62,6 +67,7 @@ async def test_update_user_password(user_service, mock_user_repo, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_user_exception(user_service, mock_user_repo):
     user = DummyModel()
     mock_user_repo.data[user.id] = user
@@ -72,6 +78,7 @@ async def test_update_user_exception(user_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_delete_user_success(user_service, mock_user_repo):
     user = DummyModel()
     mock_user_repo.data[user.id] = user
@@ -81,6 +88,7 @@ async def test_delete_user_success(user_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_delete_user_exception(user_service, mock_user_repo):
     user = DummyModel()
     mock_user_repo.data[user.id] = user
@@ -91,6 +99,7 @@ async def test_delete_user_exception(user_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_user_not_found(user_service, mock_user_repo):
     with pytest.raises(NotFoundError) as exc:
         await user_service.update("fake_id", {})
@@ -98,6 +107,7 @@ async def test_update_user_not_found(user_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_email_conflict(user_service, mock_user_repo):
     user = DummyModel(email="old@example.com")
     other_user = DummyModel(email="used@example.com")
@@ -109,6 +119,7 @@ async def test_update_email_conflict(user_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_delete_user_not_found(user_service, mock_user_repo):
     with pytest.raises(NotFoundError) as exc:
         await user_service.delete("fake_id")
@@ -116,6 +127,7 @@ async def test_delete_user_not_found(user_service, mock_user_repo):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_password_wrong_current(user_service, mocker):
     user = DummyModel(password="pass")
     mocker.patch("app.services.user.to_thread.run_sync", new_callable=mocker.AsyncMock, return_value=False)
@@ -125,6 +137,7 @@ async def test_update_password_wrong_current(user_service, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_password_same(user_service, mocker):
     user = DummyModel(password="pass")
     mocker.patch("app.services.user.to_thread.run_sync", new_callable=mocker.AsyncMock, return_value=True)
@@ -134,6 +147,7 @@ async def test_update_password_same(user_service, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_password_success(user_service, mock_user_repo, mocker):
     user = DummyModel(password="pass")
     mocker.patch(
@@ -145,6 +159,7 @@ async def test_update_password_success(user_service, mock_user_repo, mocker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_update_password_exception(user_service, mock_user_repo, mocker):
     user = DummyModel(password="pass")
     mocker.patch(

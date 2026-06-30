@@ -2,6 +2,7 @@ import pytest
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_websocket_connect_disconnect(manager, mocker):
     ws1 = mocker.AsyncMock()
     ws2 = mocker.AsyncMock()

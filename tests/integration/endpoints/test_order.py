@@ -9,6 +9,7 @@ from tests.factories import OrderItemFactory
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_read_orders(authorized_client: AsyncClient, test_order: Order):
     response = await authorized_client.get("/orders/?limit=10&offset=0")
     assert response.status_code == status.HTTP_200_OK
@@ -18,6 +19,7 @@ async def test_read_orders(authorized_client: AsyncClient, test_order: Order):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_read_order(authorized_client: AsyncClient, test_order: Order):
     response = await authorized_client.get(f"/orders/{test_order.id}")
     assert response.status_code == status.HTTP_200_OK
@@ -25,6 +27,7 @@ async def test_read_order(authorized_client: AsyncClient, test_order: Order):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_create_order(authorized_client: AsyncClient, test_product: Product):
     response = await authorized_client.post(
         "/orders/", json={"items": [{"product_id": str(test_product.id), "quantity": 1}]}
@@ -35,6 +38,7 @@ async def test_create_order(authorized_client: AsyncClient, test_product: Produc
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_cancel_order(authorized_client: AsyncClient, test_order: Order):
     response = await authorized_client.patch(f"/orders/{test_order.id}/cancel")
     assert response.status_code == status.HTTP_200_OK
@@ -42,6 +46,7 @@ async def test_cancel_order(authorized_client: AsyncClient, test_order: Order):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_complete_order(authorized_client: AsyncClient, test_order: Order):
     response = await authorized_client.patch(f"/orders/{test_order.id}/complete")
     assert response.status_code == status.HTTP_200_OK
@@ -49,6 +54,7 @@ async def test_complete_order(authorized_client: AsyncClient, test_order: Order)
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_read_order_items(
     authorized_client: AsyncClient, db_session, test_order: Order, test_product: Product
 ):

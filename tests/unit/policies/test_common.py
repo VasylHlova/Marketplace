@@ -11,6 +11,7 @@ from app.policies.common import (
 from tests.factories import ChatRoomFactory, UserFactory
 
 
+@pytest.mark.unit
 def test_allow_all_policy():
     policy = AllowAllPolicy()
     user = UserFactory.build()
@@ -22,6 +23,7 @@ class DummyResource:
     user_id: str
 
 
+@pytest.mark.unit
 def test_is_owner_policy():
     policy = IsOwnerPolicy(owner_field="user_id")
     user = UserFactory.build()
@@ -32,12 +34,14 @@ def test_is_owner_policy():
         policy.apply(other_user, resource)
 
 
+@pytest.mark.unit
 def test_is_owner_policy_no_resource():
     policy = IsOwnerPolicy()
     user = UserFactory.build()
     policy.apply(user, None)
 
 
+@pytest.mark.unit
 def test_is_owner_policy_custom_detail():
     policy = IsOwnerPolicy(owner_field="user_id", detail="Custom error")
     user = UserFactory.build()
@@ -48,6 +52,7 @@ def test_is_owner_policy_custom_detail():
     assert exc.value.message == "Custom error"
 
 
+@pytest.mark.unit
 def test_is_room_participant_as_buyer():
     buyer = UserFactory.build()
     room = ChatRoomFactory.build(buyer_id=buyer.id)
@@ -55,6 +60,7 @@ def test_is_room_participant_as_buyer():
     policy.apply(buyer, room)
 
 
+@pytest.mark.unit
 def test_is_room_participant_as_seller():
     seller = UserFactory.build()
     room = ChatRoomFactory.build(seller_id=seller.id)
@@ -62,6 +68,7 @@ def test_is_room_participant_as_seller():
     policy.apply(seller, room)
 
 
+@pytest.mark.unit
 def test_is_room_participant_stranger_forbidden():
     stranger = UserFactory.build()
     room = ChatRoomFactory.build()
@@ -71,6 +78,7 @@ def test_is_room_participant_stranger_forbidden():
     assert "Access denied" in exc.value.message
 
 
+@pytest.mark.unit
 def test_is_room_participant_no_resource():
     user = UserFactory.build()
     policy = IsRoomParticipantPolicy()

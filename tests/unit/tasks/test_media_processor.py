@@ -4,6 +4,7 @@ from botocore.exceptions import BotoCoreError
 from app.tasks.media_processor import process_media_task
 
 
+@pytest.mark.unit
 def test_process_media_task_success(mocker, faker):
     mock_run = mocker.patch("app.tasks.media_processor._run")
     mock_asyncio_run = mocker.patch("app.tasks.media_processor.asyncio.run")
@@ -18,6 +19,7 @@ def test_process_media_task_success(mocker, faker):
     mock_asyncio_run.assert_called_once()
 
 
+@pytest.mark.unit
 def test_process_media_task_retry(mocker, faker):
     _mock_run = mocker.patch("app.tasks.media_processor._run")  # noqa: F841
     mock_asyncio_run = mocker.patch("app.tasks.media_processor.asyncio.run")
@@ -39,6 +41,7 @@ def test_process_media_task_retry(mocker, faker):
 
 
 @pytest.mark.asyncio
+@pytest.mark.unit
 async def test_run_internal(mocker, faker):
     from app.tasks.media_processor import _run
 
